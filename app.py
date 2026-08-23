@@ -22,7 +22,6 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
 
-/* الخط العام واتجاه الصفحة */
 html,
 body,
 .stApp {
@@ -31,7 +30,6 @@ body,
     color-scheme: light !important;
 }
 
-/* خلفية التطبيق */
 .stApp,
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(
@@ -42,12 +40,10 @@ body,
     color: #1e293b !important;
 }
 
-/* أعلى الصفحة */
 [data-testid="stHeader"] {
     background-color: transparent !important;
 }
 
-/* النصوص العامة */
 p,
 label,
 .stMarkdown,
@@ -57,7 +53,6 @@ label,
     color: #26384d !important;
 }
 
-/* العناوين */
 h1 {
     font-family: 'Tajawal', sans-serif !important;
     color: #123a63 !important;
@@ -71,7 +66,6 @@ h3 {
     font-weight: 700 !important;
 }
 
-/* حقول الإدخال */
 .stTextInput input,
 .stNumberInput input {
     font-family: 'Tajawal', sans-serif !important;
@@ -83,7 +77,6 @@ h3 {
     text-align: left;
 }
 
-/* القائمة المنسدلة */
 div[data-baseweb="select"] > div {
     font-family: 'Tajawal', sans-serif !important;
     background-color: #ffffff !important;
@@ -92,7 +85,6 @@ div[data-baseweb="select"] > div {
     border-radius: 10px !important;
 }
 
-/* زر التشغيل */
 .stButton > button {
     width: 100%;
     min-height: 48px;
@@ -120,7 +112,6 @@ div[data-baseweb="select"] > div {
     transform: translateY(-1px);
 }
 
-/* بطاقات الإحصائيات */
 [data-testid="stMetric"] {
     background-color: #ffffff !important;
     border: 1px solid #cbdcea !important;
@@ -137,7 +128,6 @@ div[data-baseweb="select"] > div {
     color: #173f67 !important;
 }
 
-/* وصف التطبيق */
 .app-description {
     background-color: #ffffff !important;
     color: #334155 !important;
@@ -149,7 +139,16 @@ div[data-baseweb="select"] > div {
     box-shadow: 0 4px 12px rgba(23, 54, 93, 0.06);
 }
 
-/* اتجاه العناصر العربية */
+.example-description {
+    background-color: #edf6ff !important;
+    color: #244766 !important;
+    padding: 13px 17px;
+    border-right: 4px solid #5b9bd5;
+    border-radius: 10px;
+    line-height: 1.8;
+    margin: 8px 0 18px 0;
+}
+
 .stMarkdown,
 [data-testid="stWidgetLabel"],
 [data-testid="stAlert"] {
@@ -161,16 +160,117 @@ div[data-baseweb="select"] > div {
 
 
 # ==========================================
-# دالة قراءة الأضلاع
+# الأمثلة الجاهزة
+# ==========================================
+EXAMPLES = {
+    "مخطط مستوٍ": {
+        "edges": "(1,2), (2,3), (3,4), (4,1), (1,3)",
+        "start": 1,
+        "end": 4,
+        "layout": "تلقائي",
+        "description": (
+            "مثال لمخطط مستوٍ يمكن رسمه دون تقاطع الأضلاع، "
+            "ويُستخدم لتجربة صيغة أويلر وحساب عدد الأوجه."
+        )
+    },
+
+    "شجرة": {
+        "edges": "(1,2), (1,3), (2,4), (2,5)",
+        "start": 4,
+        "end": 3,
+        "layout": "تلقائي",
+        "description": (
+            "مثال لمخطط متصل لا يحتوي على دورات مغلقة. "
+            "يحتوي على 5 رؤوس و4 أضلاع."
+        )
+    },
+
+    "K3,3 غير مستوٍ": {
+        "edges": (
+            "(1,4), (1,5), (1,6), "
+            "(2,4), (2,5), (2,6), "
+            "(3,4), (3,5), (3,6)"
+        ),
+        "start": 1,
+        "end": 6,
+        "layout": "ثنائي الأجزاء Bipartite",
+        "description": (
+            "مثال مشهور لمخطط ثنائي الأجزاء وغير مستوٍ. "
+            "يتكون من مجموعتين، وفي كل مجموعة ثلاثة رؤوس."
+        )
+    },
+
+    "إدخال مخصص": {
+        "edges": "",
+        "start": 1,
+        "end": 2,
+        "layout": "تلقائي",
+        "description": (
+            "اكتبي أضلاع مخططك الخاص، ثم حددي نقطة البداية "
+            "ونقطة النهاية وطريقة الرسم."
+        )
+    }
+}
+
+
+LAYOUT_OPTIONS = [
+    "تلقائي",
+    "مستوٍ Planar",
+    "ثنائي الأجزاء Bipartite",
+    "نابضي Spring",
+    "كاماتا–كاواي",
+    "طيفي Spectral",
+    "صدفي Shell",
+    "دائري Circular"
+]
+
+
+# ==========================================
+# إعداد القيم الأولية
+# ==========================================
+if "selected_example" not in st.session_state:
+    st.session_state.selected_example = "مخطط مستوٍ"
+
+if "edges_input" not in st.session_state:
+    st.session_state.edges_input = EXAMPLES["مخطط مستوٍ"]["edges"]
+
+if "start_node" not in st.session_state:
+    st.session_state.start_node = EXAMPLES["مخطط مستوٍ"]["start"]
+
+if "end_node" not in st.session_state:
+    st.session_state.end_node = EXAMPLES["مخطط مستوٍ"]["end"]
+
+if "layout_name" not in st.session_state:
+    st.session_state.layout_name = EXAMPLES["مخطط مستوٍ"]["layout"]
+
+
+# ==========================================
+# تحديث البيانات عند تغيير المثال
+# ==========================================
+def load_selected_example():
+    example_name = st.session_state.selected_example
+    example = EXAMPLES[example_name]
+
+    st.session_state.edges_input = example["edges"]
+    st.session_state.start_node = example["start"]
+    st.session_state.end_node = example["end"]
+    st.session_state.layout_name = example["layout"]
+
+
+# ==========================================
+# قراءة الأضلاع والتحقق منها
 # ==========================================
 def parse_edges(edges_text):
-    """تحويل النص المدخل إلى قائمة أضلاع والتحقق من صحته."""
-
     if not edges_text.strip():
-        raise ValueError("لم يتم إدخال أي أضلاع.")
+        raise ValueError(
+            "لم يتم إدخال أي أضلاع."
+        )
 
     try:
-        edges = ast.literal_eval(f"[{edges_text}]")
+        edges = ast.literal_eval(
+            f"[{edges_text}]"
+        )
+
     except (ValueError, SyntaxError):
         raise ValueError(
             "صيغة الأضلاع غير صحيحة. "
@@ -178,48 +278,52 @@ def parse_edges(edges_text):
         )
 
     if not isinstance(edges, list) or len(edges) == 0:
-        raise ValueError("يجب إدخال ضلع واحد على الأقل.")
+        raise ValueError(
+            "يجب إدخال ضلع واحد على الأقل."
+        )
 
     cleaned_edges = []
 
     for edge in edges:
-        if not isinstance(edge, (tuple, list)) or len(edge) != 2:
+        if (
+            not isinstance(edge, (tuple, list))
+            or len(edge) != 2
+        ):
             raise ValueError(
-                "كل ضلع يجب أن يحتوي على رأسين فقط، مثل: (1,2)"
+                "كل ضلع يجب أن يحتوي على رأسين فقط، "
+                "مثل: (1,2)"
             )
 
         node1, node2 = edge
 
-        if not isinstance(node1, int) or not isinstance(node2, int):
+        if (
+            not isinstance(node1, int)
+            or not isinstance(node2, int)
+        ):
             raise ValueError(
                 "يجب أن تكون أسماء الرؤوس أرقامًا صحيحة."
             )
 
         if node1 == node2:
             raise ValueError(
-                f"الحلقة ({node1},{node2}) غير مسموحة في هذا الإصدار."
+                f"الحلقة ({node1},{node2}) "
+                "غير مسموحة في هذا الإصدار."
             )
 
-        cleaned_edges.append((node1, node2))
+        normalized_edge = tuple(
+            sorted((node1, node2))
+        )
 
-    # حذف الأضلاع المكررة
-    unique_edges = []
+        if normalized_edge not in cleaned_edges:
+            cleaned_edges.append(normalized_edge)
 
-    for node1, node2 in cleaned_edges:
-        edge = tuple(sorted((node1, node2)))
-
-        if edge not in unique_edges:
-            unique_edges.append(edge)
-
-    return unique_edges
+    return cleaned_edges
 
 
 # ==========================================
-# دالة اختيار طريقة الرسم
+# اختيار طريقة الرسم
 # ==========================================
 def get_layout(graph, layout_name, is_planar):
-    """اختيار توزيع الرؤوس المناسب."""
-
     if layout_name == "تلقائي":
         if is_planar:
             return nx.planar_layout(graph)
@@ -253,7 +357,8 @@ def get_layout(graph, layout_name, is_planar):
     if layout_name == "ثنائي الأجزاء Bipartite":
         if not nx.is_bipartite(graph):
             raise ValueError(
-                "هذا التخطيط متاح فقط للمخططات ثنائية الأجزاء."
+                "هذا التخطيط متاح فقط "
+                "للمخططات ثنائية الأجزاء."
             )
 
         colors = nx.bipartite.color(graph)
@@ -301,11 +406,38 @@ st.title("📐 أداة تحليل ورسم المخططات الرياضية")
 
 st.markdown("""
 <div class="app-description">
-أداة تفاعلية لبناء المخططات الرياضية وتحليل خصائصها،
-وفحص استوائها، وتطبيق صيغة أويلر، وإيجاد أقصر مسار
-بين رأسين، مع توفير عدة طرق مختلفة للرسم.
+أداة تعليمية تفاعلية لبناء المخططات الرياضية وتحليل
+خصائصها، وفحص استوائها، وتطبيق صيغة أويلر،
+وإيجاد أقصر مسار بين رأسين، مع توفير عدة طرق للرسم.
 </div>
 """, unsafe_allow_html=True)
+
+
+# ==========================================
+# اختيار مثال جاهز
+# ==========================================
+st.subheader("🧪 أمثلة جاهزة للتجربة")
+
+st.selectbox(
+    "اختاري مثالًا جاهزًا أو أدخلي مخططك الخاص:",
+    list(EXAMPLES.keys()),
+    key="selected_example",
+    on_change=load_selected_example
+)
+
+current_example = EXAMPLES[
+    st.session_state.selected_example
+]
+
+st.markdown(
+    f"""
+    <div class="example-description">
+    <strong>عن المثال:</strong>
+    {current_example["description"]}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ==========================================
@@ -315,11 +447,7 @@ st.subheader("✏️ بيانات المخطط")
 
 edges_input = st.text_input(
     "أدخلي الأضلاع على شكل أزواج:",
-    value=(
-        "(1,4), (1,5), (1,6), "
-        "(2,4), (2,5), (2,6), "
-        "(3,4), (3,5), (3,6)"
-    ),
+    key="edges_input",
     help="مثال: (1,2), (2,3), (3,1)"
 )
 
@@ -329,31 +457,23 @@ with input_col1:
     start_node = st.number_input(
         "رأس بداية المسار:",
         min_value=0,
-        value=1,
-        step=1
+        step=1,
+        key="start_node"
     )
 
 with input_col2:
     end_node = st.number_input(
         "رأس نهاية المسار:",
         min_value=0,
-        value=6,
-        step=1
+        step=1,
+        key="end_node"
     )
 
 with input_col3:
     layout_name = st.selectbox(
         "طريقة الرسم:",
-        [
-            "تلقائي",
-            "مستوٍ Planar",
-            "ثنائي الأجزاء Bipartite",
-            "نابضي Spring",
-            "كاماتا–كاواي",
-            "طيفي Spectral",
-            "صدفي Shell",
-            "دائري Circular"
-        ]
+        LAYOUT_OPTIONS,
+        key="layout_name"
     )
 
 
@@ -371,17 +491,24 @@ if st.button(
         graph = nx.Graph()
         graph.add_edges_from(edges_list)
 
-        # حساب الخصائص الأساسية
+        # الخصائص الأساسية
         vertices_count = graph.number_of_nodes()
         edges_count = graph.number_of_edges()
-        components_count = nx.number_connected_components(graph)
+
+        components_count = (
+            nx.number_connected_components(graph)
+        )
 
         is_connected = nx.is_connected(graph)
-        is_planar, embedding = nx.check_planarity(graph)
+
+        is_planar, embedding = (
+            nx.check_planarity(graph)
+        )
+
         is_bipartite = nx.is_bipartite(graph)
         is_tree = nx.is_tree(graph)
 
-        # حساب عدد الأوجه وصيغة أويلر
+        # صيغة أويلر
         if is_planar:
             faces_count = (
                 edges_count
@@ -396,13 +523,16 @@ if st.button(
                 + faces_count
             )
 
-            euler_right_side = components_count + 1
+            euler_right_side = (
+                components_count + 1
+            )
+
         else:
             faces_count = "غير متاح"
             euler_left_side = None
             euler_right_side = None
 
-        # إيجاد أقصر مسار
+        # أقصر مسار
         shortest_path = None
         path_message = None
         path_length = None
@@ -414,11 +544,14 @@ if st.button(
                 target=int(end_node)
             )
 
-            path_length = len(shortest_path) - 1
+            path_length = (
+                len(shortest_path) - 1
+            )
 
         except nx.NodeNotFound:
             path_message = (
-                "إحدى النقطتين غير موجودة في المخطط."
+                "إحدى النقطتين غير موجودة "
+                "في المخطط."
             )
 
         except nx.NetworkXNoPath:
@@ -426,7 +559,7 @@ if st.button(
                 "لا يوجد مسار يربط بين النقطتين."
             )
 
-        # اختيار شكل الرسم
+        # ترتيب الرؤوس
         positions = get_layout(
             graph,
             layout_name,
@@ -434,15 +567,15 @@ if st.button(
         )
 
         # ==========================================
-        # عرض النتائج
+        # نتائج التحليل
         # ==========================================
         st.divider()
         st.subheader("📊 نتائج التحليل")
 
         if is_planar:
             st.success(
-                "✅ المخطط مستوٍ ويمكن رسمه في المستوى "
-                "دون تقاطع الأضلاع."
+                "✅ المخطط مستوٍ ويمكن رسمه "
+                "في المستوى دون تقاطع الأضلاع."
             )
         else:
             st.error(
@@ -450,7 +583,9 @@ if st.button(
                 "في المستوى دون تقاطع الأضلاع."
             )
 
-        metric1, metric2, metric3, metric4 = st.columns(4)
+        metric1, metric2, metric3, metric4 = (
+            st.columns(4)
+        )
 
         metric1.metric(
             "عدد الرؤوس V",
@@ -481,30 +616,37 @@ if st.button(
             if is_connected:
                 st.info(
                     f"V − E + F = "
-                    f"{vertices_count} − {edges_count} "
-                    f"+ {faces_count} = "
+                    f"{vertices_count} − "
+                    f"{edges_count} + "
+                    f"{faces_count} = "
                     f"{euler_left_side} = 2"
                 )
+
             else:
                 st.info(
                     f"V − E + F = "
-                    f"{vertices_count} − {edges_count} "
-                    f"+ {faces_count} = "
-                    f"{euler_left_side} = C + 1 = "
-                    f"{euler_right_side}"
+                    f"{vertices_count} − "
+                    f"{edges_count} + "
+                    f"{faces_count} = "
+                    f"{euler_left_side} = "
+                    f"C + 1 = {euler_right_side}"
                 )
+
         else:
             st.warning(
-                "لا تُطبّق صيغة أويلر الخاصة بالمخططات "
-                "المستوية؛ لأن المخطط غير مستوٍ."
+                "لا تُطبّق صيغة أويلر الخاصة "
+                "بالمخططات المستوية؛ "
+                "لأن المخطط غير مستوٍ."
             )
 
         # ==========================================
-        # خصائص إضافية
+        # خصائص المخطط
         # ==========================================
         st.subheader("🧩 خصائص المخطط")
 
-        property_col1, property_col2 = st.columns(2)
+        property_col1, property_col2 = (
+            st.columns(2)
+        )
 
         with property_col1:
             if is_connected:
@@ -513,9 +655,13 @@ if st.button(
                 st.write("**متصل:** لا ❌")
 
             if is_bipartite:
-                st.write("**ثنائي الأجزاء:** نعم ✅")
+                st.write(
+                    "**ثنائي الأجزاء:** نعم ✅"
+                )
             else:
-                st.write("**ثنائي الأجزاء:** لا ❌")
+                st.write(
+                    "**ثنائي الأجزاء:** لا ❌"
+                )
 
         with property_col2:
             if is_tree:
@@ -534,7 +680,8 @@ if st.button(
         degrees_text = "، ".join(
             [
                 f"{node}: {degree}"
-                for node, degree in sorted(degrees.items())
+                for node, degree
+                in sorted(degrees.items())
             ]
         )
 
@@ -549,15 +696,21 @@ if st.button(
 
         if shortest_path is not None:
             path_text = " ← ".join(
-                map(str, reversed(shortest_path))
+                map(
+                    str,
+                    reversed(shortest_path)
+                )
             )
 
             st.info(
-                f"أقصر مسار من {int(start_node)} "
-                f"إلى {int(end_node)}: "
+                f"أقصر مسار من "
+                f"{int(start_node)} إلى "
+                f"{int(end_node)}: "
                 f"**{path_text}**  \n"
-                f"طول المسار: **{path_length}**"
+                f"طول المسار: "
+                f"**{path_length}**"
             )
+
         else:
             st.warning(path_message)
 
@@ -573,7 +726,7 @@ if st.button(
         figure.patch.set_facecolor("#f8fbff")
         axis.set_facecolor("#f8fbff")
 
-        # رسم جميع الرؤوس
+        # الرؤوس
         nx.draw_networkx_nodes(
             graph,
             positions,
@@ -584,7 +737,7 @@ if st.button(
             ax=axis
         )
 
-        # رسم جميع الأضلاع
+        # الأضلاع
         nx.draw_networkx_edges(
             graph,
             positions,
@@ -594,7 +747,7 @@ if st.button(
             ax=axis
         )
 
-        # كتابة أرقام الرؤوس
+        # أرقام الرؤوس
         nx.draw_networkx_labels(
             graph,
             positions,
@@ -604,7 +757,7 @@ if st.button(
             ax=axis
         )
 
-        # تمييز أقصر مسار باللون الأحمر
+        # تمييز أقصر مسار
         if (
             shortest_path is not None
             and len(shortest_path) > 1
