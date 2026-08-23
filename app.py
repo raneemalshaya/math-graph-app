@@ -10,73 +10,8 @@ import streamlit as st
 # ==========================================
 st.set_page_config(
     page_title="محلل المخططات الرياضية",
-    page_icon="📐",
+ 
     layout="wide"
-)
-
-
-# ==========================================
-# تحديد الوضع الحالي
-# ==========================================
-try:
-    theme_type = st.context.theme.type
-except Exception:
-    theme_type = "light"
-
-
-if theme_type == "dark":
-    COLORS = {
-        "background": "#0B1724",
-        "surface": "#152A3D",
-        "surface_alt": "#1D3B53",
-        "text": "#F4F8FC",
-        "muted": "#C5D8E8",
-        "border": "#438FC1",
-        "primary": "#168DE0",
-        "primary_dark": "#0862A4",
-        "formula": "#173C59",
-        "formula_text": "#F2FAFF",
-        "graph": "#12283A",
-        "graph_text": "#F4F8FC",
-        "edge": "#91B5CE"
-    }
-else:
-    COLORS = {
-        "background": "#F2F7FC",
-        "surface": "#FFFFFF",
-        "surface_alt": "#E4F1FB",
-        "text": "#17324A",
-        "muted": "#506A7E",
-        "border": "#80BDE5",
-        "primary": "#147FC5",
-        "primary_dark": "#075B97",
-        "formula": "#DCEFFF",
-        "formula_text": "#124C75",
-        "graph": "#EEF6FC",
-        "graph_text": "#102F47",
-        "edge": "#52758D"
-    }
-
-
-# متغيرات الألوان
-st.markdown(
-    f"""
-    <style>
-    :root {{
-        --app-background: {COLORS["background"]};
-        --app-surface: {COLORS["surface"]};
-        --app-surface-alt: {COLORS["surface_alt"]};
-        --app-text: {COLORS["text"]};
-        --app-muted: {COLORS["muted"]};
-        --app-border: {COLORS["border"]};
-        --app-primary: {COLORS["primary"]};
-        --app-primary-dark: {COLORS["primary_dark"]};
-        --formula-background: {COLORS["formula"]};
-        --formula-text: {COLORS["formula_text"]};
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
 )
 
 
@@ -94,28 +29,27 @@ body,
     font-family: 'Tajawal', sans-serif !important;
 }
 
-/* الخلفية */
+/* الخلفية تتبع وضع Streamlit:
+   أبيض في اللايت وأسود في الدارك */
 .stApp,
-[data-testid="stAppViewContainer"] {
-    background: linear-gradient(
-        145deg,
-        var(--app-background) 0%,
-        var(--app-surface-alt) 160%
-    ) !important;
-    color: var(--app-text) !important;
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
 }
 
 [data-testid="stHeader"] {
-    background: transparent !important;
+    background-color: var(--background-color) !important;
 }
 
 /* مساحة المحتوى */
 [data-testid="stMainBlockContainer"] {
+    background-color: transparent !important;
     padding-top: 2.5rem !important;
     padding-bottom: 3rem !important;
 }
 
-/* الاتجاه العربي */
+/* اتجاه الصفحة */
 [data-testid="stMain"],
 [data-testid="stMainBlockContainer"],
 [data-testid="stVerticalBlock"],
@@ -123,6 +57,7 @@ body,
     direction: rtl !important;
 }
 
+/* النصوص */
 .stMarkdown,
 .stMarkdown p,
 .stMarkdown li,
@@ -133,25 +68,26 @@ body,
 [data-testid="stAlert"] p {
     direction: rtl !important;
     text-align: right !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
 }
 
-/* العنوان */
+/* العنوان الرئيسي */
 .main-title {
     direction: rtl;
     text-align: center !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
     font-size: 2rem !important;
     font-weight: 800 !important;
     line-height: 1.5;
     margin: 0 0 20px 0;
 }
 
+/* العناوين الفرعية */
 h2,
 h3 {
     direction: rtl !important;
     text-align: right !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
     font-weight: 700 !important;
 }
 
@@ -167,29 +103,30 @@ h3 {
 .app-description {
     direction: rtl;
     text-align: right;
-    background: var(--app-surface) !important;
-    color: var(--app-text) !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
     padding: 17px 20px;
-    border: 1px solid var(--app-border);
-    border-right: 5px solid var(--app-primary);
+    border: 1px solid #2998df;
+    border-right: 6px solid #2998df;
     border-radius: 13px;
     line-height: 1.9;
     margin-bottom: 23px;
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 4px 14px rgba(41, 152, 223, 0.18);
 }
 
 /* وصف المثال */
 .example-description {
     direction: rtl;
     text-align: right;
-    background: var(--app-surface-alt) !important;
-    color: var(--app-text) !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
     padding: 14px 18px;
-    border: 1px solid var(--app-border);
-    border-right: 4px solid var(--app-primary);
+    border: 1px solid #2998df;
+    border-right: 5px solid #2998df;
     border-radius: 11px;
     line-height: 1.8;
     margin: 8px 0 18px 0;
+    box-shadow: 0 3px 12px rgba(41, 152, 223, 0.14);
 }
 
 /* عناوين الحقول */
@@ -200,11 +137,11 @@ h3 {
 [data-testid="stWidgetLabel"] p {
     width: 100% !important;
     text-align: right !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
     font-weight: 600 !important;
 }
 
-/* الحقول */
+/* حقول الإدخال */
 .stTextInput,
 .stNumberInput,
 .stSelectbox {
@@ -224,205 +161,180 @@ h3 {
 .stTextInput input,
 .stNumberInput input,
 div[data-baseweb="select"] > div {
-    background: var(--app-surface) !important;
-    color: var(--app-text) !important;
-    border: 1px solid var(--app-border) !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border: 1.5px solid #2998df !important;
     border-radius: 10px !important;
 }
 
+/* القائمة المنسدلة */
 div[data-baseweb="select"],
 div[data-baseweb="select"] > div,
 div[data-baseweb="select"] span {
     direction: rtl !important;
     text-align: right !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
 }
 
-/* القائمة المفتوحة */
 div[data-baseweb="popover"],
 div[data-baseweb="menu"],
 ul[role="listbox"] {
     direction: rtl !important;
     text-align: right !important;
-    background: var(--app-surface) !important;
-    color: var(--app-text) !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
 }
 
 li[role="option"] {
     direction: rtl !important;
     text-align: right !important;
-    color: var(--app-text) !important;
+    color: var(--text-color) !important;
 }
 
-/* زر التشغيل */
+/* زر تشغيل التحليل */
 .stButton > button {
     width: 100% !important;
-    min-height: 54px !important;
+    min-height: 52px !important;
     background: linear-gradient(
         90deg,
-        var(--app-primary-dark),
-        var(--app-primary),
-        var(--app-primary-dark)
+        #075d9c,
+        #1594e3,
+        #075d9c
     ) !important;
-    color: #FFFFFF !important;
-    border: 2px solid #67C1FF !important;
-    border-radius: 13px !important;
+    color: #ffffff !important;
+    border: 2px solid #75caff !important;
+    border-radius: 12px !important;
     font-size: 18px !important;
     font-weight: 800 !important;
-    box-shadow: 0 6px 18px rgba(0, 112, 190, 0.40);
-    transition: 0.2s;
+    box-shadow: 0 5px 17px rgba(21, 148, 227, 0.38);
 }
 
 .stButton > button p,
 .stButton > button span,
 .stButton > button div {
-    color: #FFFFFF !important;
-    fill: #FFFFFF !important;
+    color: #ffffff !important;
+    fill: #ffffff !important;
     text-align: center !important;
     font-size: 18px !important;
     font-weight: 800 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.50);
 }
 
 .stButton > button:hover {
-    color: #FFFFFF !important;
-    border-color: #B7E5FF !important;
-    filter: brightness(1.1);
-    transform: translateY(-1px);
-}
-
-/* شبكة بطاقات النتائج */
-.metrics-grid {
-    direction: rtl;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    width: 100%;
-    margin: 15px 0 28px 0;
-}
-
-/* بطاقة النتيجة */
-.metric-card {
     background: linear-gradient(
-        145deg,
-        var(--app-surface-alt),
-        var(--app-surface)
+        90deg,
+        #054b7d,
+        #0879be,
+        #054b7d
     ) !important;
-    border: 1.5px solid var(--app-border);
-    border-top: 4px solid var(--app-primary);
-    border-radius: 14px;
-    min-height: 115px;
-    padding: 14px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16);
+    color: #ffffff !important;
+    border-color: #c2ebff !important;
 }
 
-/* عنوان البطاقة */
-.metric-title {
-    direction: rtl;
+/* بطاقات النتائج الأصلية */
+[data-testid="stMetric"] {
+    direction: rtl !important;
     text-align: center !important;
-    color: var(--app-muted) !important;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 7px;
-    line-height: 1.5;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border: 2px solid #2998df !important;
+    border-top: 5px solid #1594e3 !important;
+    border-radius: 14px !important;
+    padding: 14px 10px !important;
+    min-height: 105px !important;
+    height: auto !important;
+    box-shadow: 0 5px 15px rgba(21, 148, 227, 0.20);
 }
 
-/* رقم البطاقة */
-.metric-value {
-    direction: ltr;
+/* منع البطاقات من التمدد */
+[data-testid="stMetric"] > div {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+/* عنوان ورقم البطاقة */
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p,
+[data-testid="stMetricValue"] {
+    direction: rtl !important;
     text-align: center !important;
-    color: var(--app-text) !important;
-    font-size: 2.25rem;
-    font-weight: 800;
-    line-height: 1.2;
+    color: var(--text-color) !important;
+}
+
+[data-testid="stMetricLabel"] p {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stMetricValue"] {
+    font-size: 2.15rem !important;
+    font-weight: 800 !important;
 }
 
 /* صندوق صيغة أويلر */
-.formula-card {
+.formula-box {
     direction: ltr;
     text-align: center !important;
-    background: var(--formula-background) !important;
-    color: var(--formula-text) !important;
-    border: 1.5px solid var(--app-border);
-    border-radius: 13px;
-    padding: 18px 12px;
-    margin: 10px 0 24px 0;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border: 2px solid #2998df;
+    border-radius: 12px;
+    padding: 17px 10px;
+    margin: 8px 0 22px 0;
     font-family: Arial, sans-serif !important;
-    font-size: clamp(17px, 4vw, 23px);
+    font-size: clamp(16px, 4vw, 22px);
     font-weight: 700;
     line-height: 1.7;
     overflow-x: auto;
     white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.13);
+    box-shadow: 0 4px 14px rgba(21, 148, 227, 0.18);
 }
 
-/* رسائل Streamlit */
+/* رسائل النتائج */
 [data-testid="stAlert"] {
     border-radius: 12px !important;
     border-width: 1px !important;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
 }
 
 /* الخط الفاصل */
 hr {
-    border-color: var(--app-border) !important;
-    opacity: 0.5;
+    border-color: #2998df !important;
+    opacity: 0.55;
 }
 
-/* الجوال */
+/* تنسيق الجوال */
 @media (max-width: 700px) {
     [data-testid="stMainBlockContainer"] {
         padding-top: 2rem !important;
-        padding-left: 0.9rem !important;
-        padding-right: 0.9rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }
 
     .main-title {
         font-size: 1.55rem !important;
-        line-height: 1.55;
     }
 
-    .metrics-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+    [data-testid="stMetric"] {
+        min-height: 95px !important;
+        padding: 11px 8px !important;
+        margin-bottom: 7px !important;
     }
 
-    .metric-card {
-        min-height: 105px;
-        padding: 11px 7px;
+    [data-testid="stMetricLabel"] p {
+        font-size: 0.92rem !important;
     }
 
-    .metric-title {
-        font-size: 0.88rem;
+    [data-testid="stMetricValue"] {
+        font-size: 1.85rem !important;
     }
 
-    .metric-value {
-        font-size: 1.9rem;
-    }
-
-    .formula-card {
+    .formula-box {
         font-size: 16px;
-        padding: 15px 8px;
+        padding: 14px 8px;
     }
 
     .app-description,
     .example-description {
         padding: 13px 15px;
-    }
-}
-
-/* الشاشات الصغيرة جدًا */
-@media (max-width: 360px) {
-    .metric-title {
-        font-size: 0.8rem;
-    }
-
-    .metric-value {
-        font-size: 1.7rem;
     }
 }
 </style>
@@ -515,7 +427,7 @@ if "layout_name" not in st.session_state:
 
 
 # ==========================================
-# تحميل المثال
+# تحميل المثال المحدد
 # ==========================================
 def load_selected_example():
     example = EXAMPLES[st.session_state.selected_example]
@@ -580,7 +492,7 @@ def parse_edges(edges_text):
 
 
 # ==========================================
-# اختيار طريقة الرسم
+# طريقة الرسم
 # ==========================================
 def get_layout(graph, layout_name, is_planar):
     if layout_name == "تلقائي":
@@ -655,7 +567,7 @@ def get_layout(graph, layout_name, is_planar):
 # واجهة التطبيق
 # ==========================================
 st.markdown(
-    '<h1 class="main-title">📐 أداة تحليل ورسم المخططات الرياضية</h1>',
+    '<h1 class="main-title"> أداة تحليل ورسم المخططات الرياضية</h1>',
     unsafe_allow_html=True
 )
 
@@ -668,8 +580,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# اختيار مثال
-st.subheader("🧪 أمثلة جاهزة للتجربة")
+# الأمثلة
+st.subheader("📐 أمثلة جاهزة للتجربة")
 
 st.selectbox(
     "اختاري مثالًا جاهزًا أو أدخلي مخططك الخاص:",
@@ -799,9 +711,7 @@ if st.button(
             is_planar
         )
 
-        # ==========================================
         # النتائج
-        # ==========================================
         st.divider()
         st.subheader("📊 نتائج التحليل")
 
@@ -816,32 +726,27 @@ if st.button(
                 "في المستوى دون تقاطع الأضلاع."
             )
 
-        # بطاقات النتائج المخصصة
-        st.markdown(
-            f"""
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-title">عدد الرؤوس (V)</div>
-                    <div class="metric-value">{vertices_count}</div>
-                </div>
+        # بطاقات Streamlit الأصلية
+        metric1, metric2, metric3, metric4 = st.columns(4)
 
-                <div class="metric-card">
-                    <div class="metric-title">عدد الأضلاع (E)</div>
-                    <div class="metric-value">{edges_count}</div>
-                </div>
+        metric1.metric(
+            "عدد الرؤوس (V)",
+            vertices_count
+        )
 
-                <div class="metric-card">
-                    <div class="metric-title">عدد الأوجه (F)</div>
-                    <div class="metric-value">{faces_count}</div>
-                </div>
+        metric2.metric(
+            "عدد الأضلاع (E)",
+            edges_count
+        )
 
-                <div class="metric-card">
-                    <div class="metric-title">المكونات المتصلة</div>
-                    <div class="metric-value">{components_count}</div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
+        metric3.metric(
+            "عدد الأوجه (F)",
+            faces_count
+        )
+
+        metric4.metric(
+            "المكونات المتصلة",
+            components_count
         )
 
         # صيغة أويلر
@@ -850,22 +755,20 @@ if st.button(
         if is_planar:
             if is_connected:
                 formula_text = (
+                    f"V − E + F = "
                     f"{vertices_count} − {edges_count} "
                     f"+ {faces_count} = {euler_result}"
                 )
             else:
                 formula_text = (
+                    f"V − E + F = "
                     f"{vertices_count} − {edges_count} "
-                    f"+ {faces_count} = {euler_result} "
-                    f"= C + 1"
+                    f"+ {faces_count} = {euler_result} = C + 1"
                 )
 
+            # سطر واحد لتجنب ظهور HTML كنص
             st.markdown(
-                f"""
-                <div class="formula-card">
-                    V − E + F = {formula_text}
-                </div>
-                """,
+                f'<div class="formula-box">{formula_text}</div>',
                 unsafe_allow_html=True
             )
 
@@ -930,19 +833,19 @@ if st.button(
         else:
             st.warning(path_message)
 
-        # الرسم
+        # الرسم البياني
         st.subheader("🎨 الرسم البياني")
 
         figure, axis = plt.subplots(figsize=(10, 6))
 
-        figure.patch.set_facecolor(COLORS["graph"])
-        axis.set_facecolor(COLORS["graph"])
+        figure.patch.set_facecolor("#EEF5FA")
+        axis.set_facecolor("#EEF5FA")
 
         nx.draw_networkx_nodes(
             graph,
             positions,
-            node_color="#50AEE8",
-            edgecolors="#D3EEFF",
+            node_color="#65B9EC",
+            edgecolors="#174A6B",
             linewidths=1.8,
             node_size=1100,
             ax=axis
@@ -951,7 +854,7 @@ if st.button(
         nx.draw_networkx_edges(
             graph,
             positions,
-            edge_color=COLORS["edge"],
+            edge_color="#52758D",
             width=2,
             alpha=0.9,
             ax=axis
@@ -962,7 +865,7 @@ if st.button(
             positions,
             font_size=12,
             font_weight="bold",
-            font_color=COLORS["graph_text"],
+            font_color="#102F47",
             ax=axis
         )
 
@@ -980,7 +883,7 @@ if st.button(
                 positions,
                 nodelist=shortest_path,
                 node_color="#F05D68",
-                edgecolors="#FFD6D9",
+                edgecolors="#9B1C28",
                 linewidths=2,
                 node_size=1100,
                 ax=axis
@@ -990,7 +893,7 @@ if st.button(
                 graph,
                 positions,
                 edgelist=path_edges,
-                edge_color="#FF4B55",
+                edge_color="#D62838",
                 width=4,
                 ax=axis
             )
@@ -1008,7 +911,7 @@ if st.button(
             f"طريقة الرسم: {layout_name}",
             fontsize=14,
             fontweight="bold",
-            color=COLORS["graph_text"],
+            color="#17365D",
             pad=18
         )
 
