@@ -16,83 +16,199 @@ st.set_page_config(
 
 
 # ==========================================
-# تصميم الواجهة والخط العربي
+# التصميم والخط العربي
 # ==========================================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
 
+/* إعدادات عامة */
 html,
 body,
-.stApp {
+.stApp,
+.stApp * {
     font-family: 'Tajawal', sans-serif !important;
-    direction: rtl;
-    color-scheme: light !important;
 }
 
+/* خلفية التطبيق تتغير حسب الوضع */
 .stApp,
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(
         135deg,
-        #f8fbff 0%,
-        #eaf3fb 100%
+        var(--background-color) 0%,
+        var(--secondary-background-color) 100%
     ) !important;
-    color: #1e293b !important;
+    color: var(--text-color) !important;
 }
 
+/* أعلى الصفحة */
 [data-testid="stHeader"] {
     background-color: transparent !important;
 }
 
-p,
-label,
+/* اتجاه الصفحة */
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stVerticalBlock"],
+[data-testid="stHorizontalBlock"] {
+    direction: rtl !important;
+}
+
+/* محاذاة النصوص العربية */
 .stMarkdown,
+.stMarkdown p,
+.stMarkdown li,
+.stMarkdown div,
 [data-testid="stWidgetLabel"],
-[data-testid="stCaptionContainer"] {
-    font-family: 'Tajawal', sans-serif !important;
-    color: #26384d !important;
+[data-testid="stWidgetLabel"] p,
+[data-testid="stCaptionContainer"],
+[data-testid="stAlert"],
+[data-testid="stAlert"] p {
+    direction: rtl !important;
+    text-align: right !important;
+    color: var(--text-color) !important;
 }
 
+/* عنوان التطبيق الرئيسي */
 h1 {
-    font-family: 'Tajawal', sans-serif !important;
-    color: #123a63 !important;
+    direction: rtl !important;
+    text-align: center !important;
+    color: var(--text-color) !important;
+    font-size: 2.05rem !important;
     font-weight: 800 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 18px !important;
 }
 
+/* العناوين الفرعية */
 h2,
 h3 {
-    font-family: 'Tajawal', sans-serif !important;
-    color: #1d4e79 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    color: var(--text-color) !important;
     font-weight: 700 !important;
 }
 
-.stTextInput input,
-.stNumberInput input {
-    font-family: 'Tajawal', sans-serif !important;
-    background-color: #ffffff !important;
-    color: #172033 !important;
-    border: 1px solid #b9cfe3 !important;
+/* تصغير العناوين الفرعية قليلًا */
+h2 {
+    font-size: 1.55rem !important;
+}
+
+h3 {
+    font-size: 1.3rem !important;
+}
+
+/* وصف التطبيق */
+.app-description {
+    direction: rtl !important;
+    text-align: right !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    padding: 16px 20px;
+    border-right: 5px solid var(--primary-color);
+    border-radius: 12px;
+    line-height: 1.9;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+}
+
+/* وصف المثال */
+.example-description {
+    direction: rtl !important;
+    text-align: right !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    padding: 13px 17px;
+    border-right: 4px solid var(--primary-color);
+    border-radius: 10px;
+    line-height: 1.8;
+    margin: 8px 0 18px 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* عناوين خانات الإدخال */
+[data-testid="stWidgetLabel"] {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+}
+
+[data-testid="stWidgetLabel"] p {
+    width: 100% !important;
+    text-align: right !important;
+}
+
+/* خانة إدخال الأضلاع */
+.stTextInput {
+    direction: rtl !important;
+}
+
+.stTextInput input {
+    direction: ltr !important;
+    text-align: left !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border: 1px solid rgba(128, 128, 128, 0.45) !important;
     border-radius: 10px !important;
-    direction: ltr;
-    text-align: left;
+}
+
+/* خانات الأرقام */
+.stNumberInput {
+    direction: rtl !important;
+}
+
+.stNumberInput input {
+    direction: ltr !important;
+    text-align: center !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* القائمة المنسدلة */
+.stSelectbox {
+    direction: rtl !important;
+    text-align: right !important;
 }
 
 div[data-baseweb="select"] > div {
-    font-family: 'Tajawal', sans-serif !important;
-    background-color: #ffffff !important;
-    color: #172033 !important;
-    border-color: #b9cfe3 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border-color: rgba(128, 128, 128, 0.45) !important;
     border-radius: 10px !important;
 }
 
+div[data-baseweb="select"] span {
+    direction: rtl !important;
+    text-align: right !important;
+    color: var(--text-color) !important;
+}
+
+/* خيارات القائمة عند فتحها */
+div[data-baseweb="popover"],
+div[data-baseweb="menu"],
+ul[role="listbox"] {
+    direction: rtl !important;
+    text-align: right !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+}
+
+li[role="option"] {
+    direction: rtl !important;
+    text-align: right !important;
+    color: var(--text-color) !important;
+}
+
+/* زر التشغيل */
 .stButton > button {
     width: 100%;
     min-height: 48px;
-    font-family: 'Tajawal', sans-serif !important;
     color: #ffffff !important;
     background: linear-gradient(
         90deg,
-        #174873,
+        var(--primary-color),
         #2878b8
     ) !important;
     border: none !important;
@@ -102,58 +218,54 @@ div[data-baseweb="select"] > div {
     transition: 0.2s;
 }
 
+.stButton > button p {
+    color: #ffffff !important;
+    text-align: center !important;
+}
+
 .stButton > button:hover {
     color: #ffffff !important;
-    background: linear-gradient(
-        90deg,
-        #103553,
-        #1f659d
-    ) !important;
+    filter: brightness(0.88);
     transform: translateY(-1px);
 }
 
+/* بطاقات الإحصائيات */
 [data-testid="stMetric"] {
-    background-color: #ffffff !important;
-    border: 1px solid #cbdcea !important;
+    direction: rtl !important;
+    text-align: center !important;
+    background-color: var(--secondary-background-color) !important;
+    color: var(--text-color) !important;
+    border: 1px solid rgba(128, 128, 128, 0.35) !important;
     border-radius: 14px !important;
     padding: 15px !important;
-    box-shadow: 0 4px 12px rgba(23, 54, 93, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
 }
 
-[data-testid="stMetricLabel"] p {
-    color: #50677d !important;
-}
-
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p,
 [data-testid="stMetricValue"] {
-    color: #173f67 !important;
+    direction: rtl !important;
+    text-align: center !important;
+    color: var(--text-color) !important;
 }
 
-.app-description {
-    background-color: #ffffff !important;
-    color: #334155 !important;
-    padding: 16px 20px;
-    border-right: 5px solid #2878b8;
-    border-radius: 12px;
-    line-height: 1.9;
-    margin-bottom: 22px;
-    box-shadow: 0 4px 12px rgba(23, 54, 93, 0.06);
+/* الخط الفاصل */
+hr {
+    border-color: rgba(128, 128, 128, 0.30) !important;
 }
 
-.example-description {
-    background-color: #edf6ff !important;
-    color: #244766 !important;
-    padding: 13px 17px;
-    border-right: 4px solid #5b9bd5;
+/* شريط تمرير مناسب للوضعين */
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
     border-radius: 10px;
-    line-height: 1.8;
-    margin: 8px 0 18px 0;
-}
-
-.stMarkdown,
-[data-testid="stWidgetLabel"],
-[data-testid="stAlert"] {
-    direction: rtl;
-    text-align: right;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -181,7 +293,7 @@ EXAMPLES = {
         "layout": "تلقائي",
         "description": (
             "مثال لمخطط متصل لا يحتوي على دورات مغلقة. "
-            "يحتوي على 5 رؤوس و4 أضلاع."
+            "يحتوي على خمسة رؤوس وأربعة أضلاع."
         )
     },
 
@@ -245,7 +357,7 @@ if "layout_name" not in st.session_state:
 
 
 # ==========================================
-# تحديث البيانات عند تغيير المثال
+# تحميل المثال المحدد
 # ==========================================
 def load_selected_example():
     example_name = st.session_state.selected_example
@@ -262,14 +374,10 @@ def load_selected_example():
 # ==========================================
 def parse_edges(edges_text):
     if not edges_text.strip():
-        raise ValueError(
-            "لم يتم إدخال أي أضلاع."
-        )
+        raise ValueError("لم يتم إدخال أي أضلاع.")
 
     try:
-        edges = ast.literal_eval(
-            f"[{edges_text}]"
-        )
+        edges = ast.literal_eval(f"[{edges_text}]")
 
     except (ValueError, SyntaxError):
         raise ValueError(
@@ -485,13 +593,11 @@ if st.button(
     use_container_width=True
 ):
     try:
-        # إنشاء المخطط
         edges_list = parse_edges(edges_input)
 
         graph = nx.Graph()
         graph.add_edges_from(edges_list)
 
-        # الخصائص الأساسية
         vertices_count = graph.number_of_nodes()
         edges_count = graph.number_of_edges()
 
@@ -544,14 +650,11 @@ if st.button(
                 target=int(end_node)
             )
 
-            path_length = (
-                len(shortest_path) - 1
-            )
+            path_length = len(shortest_path) - 1
 
         except nx.NodeNotFound:
             path_message = (
-                "إحدى النقطتين غير موجودة "
-                "في المخطط."
+                "إحدى النقطتين غير موجودة في المخطط."
             )
 
         except nx.NetworkXNoPath:
@@ -559,7 +662,6 @@ if st.button(
                 "لا يوجد مسار يربط بين النقطتين."
             )
 
-        # ترتيب الرؤوس
         positions = get_layout(
             graph,
             layout_name,
@@ -567,7 +669,7 @@ if st.button(
         )
 
         # ==========================================
-        # نتائج التحليل
+        # النتائج
         # ==========================================
         st.divider()
         st.subheader("📊 نتائج التحليل")
@@ -583,22 +685,20 @@ if st.button(
                 "في المستوى دون تقاطع الأضلاع."
             )
 
-        metric1, metric2, metric3, metric4 = (
-            st.columns(4)
-        )
+        metric1, metric2, metric3, metric4 = st.columns(4)
 
         metric1.metric(
-            "عدد الرؤوس V",
+            "عدد الرؤوس (V)",
             vertices_count
         )
 
         metric2.metric(
-            "عدد الأضلاع E",
+            "عدد الأضلاع (E)",
             edges_count
         )
 
         metric3.metric(
-            "عدد الأوجه F",
+            "عدد الأوجه (F)",
             faces_count
         )
 
@@ -644,9 +744,7 @@ if st.button(
         # ==========================================
         st.subheader("🧩 خصائص المخطط")
 
-        property_col1, property_col2 = (
-            st.columns(2)
-        )
+        property_col1, property_col2 = st.columns(2)
 
         with property_col1:
             if is_connected:
@@ -655,13 +753,9 @@ if st.button(
                 st.write("**متصل:** لا ❌")
 
             if is_bipartite:
-                st.write(
-                    "**ثنائي الأجزاء:** نعم ✅"
-                )
+                st.write("**ثنائي الأجزاء:** نعم ✅")
             else:
-                st.write(
-                    "**ثنائي الأجزاء:** لا ❌"
-                )
+                st.write("**ثنائي الأجزاء:** لا ❌")
 
         with property_col2:
             if is_tree:
@@ -696,10 +790,7 @@ if st.button(
 
         if shortest_path is not None:
             path_text = " ← ".join(
-                map(
-                    str,
-                    reversed(shortest_path)
-                )
+                map(str, reversed(shortest_path))
             )
 
             st.info(
@@ -723,10 +814,11 @@ if st.button(
             figsize=(10, 6)
         )
 
-        figure.patch.set_facecolor("#f8fbff")
-        axis.set_facecolor("#f8fbff")
+        # خلفية الرسم مستقلة حتى تكون واضحة في الوضعين
+        figure.patch.set_facecolor("#eef5fb")
+        axis.set_facecolor("#eef5fb")
 
-        # الرؤوس
+        # رسم الرؤوس
         nx.draw_networkx_nodes(
             graph,
             positions,
@@ -737,13 +829,13 @@ if st.button(
             ax=axis
         )
 
-        # الأضلاع
+        # رسم الأضلاع
         nx.draw_networkx_edges(
             graph,
             positions,
-            edge_color="#64748b",
+            edge_color="#52697d",
             width=2,
-            alpha=0.85,
+            alpha=0.9,
             ax=axis
         )
 
