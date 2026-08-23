@@ -5,24 +5,19 @@ import networkx as nx
 import streamlit as st
 
 
-# ==========================================
 # إعداد الصفحة
-# ==========================================
 st.set_page_config(
     page_title="محلل المخططات الرياضية",
-    page_icon="📐",
+    
     layout="wide"
 )
 
 
-# ==========================================
-# التصميم والخط العربي
-# ==========================================
+# تصميم التطبيق
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
 
-/* إعدادات عامة */
 html,
 body,
 .stApp,
@@ -30,15 +25,33 @@ body,
     font-family: 'Tajawal', sans-serif !important;
 }
 
-/* خلفية التطبيق تتغير حسب الوضع */
+/* خلفية التطبيق المتغيرة مع الوضع */
 .stApp,
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(
-        135deg,
+        145deg,
         var(--background-color) 0%,
-        var(--secondary-background-color) 100%
+        color-mix(
+            in srgb,
+            var(--background-color) 82%,
+            var(--primary-color) 18%
+        ) 100%
     ) !important;
     color: var(--text-color) !important;
+}
+
+/* مساحة المحتوى */
+[data-testid="stMainBlockContainer"] {
+    background: color-mix(
+        in srgb,
+        var(--background-color) 92%,
+        white 8%
+    ) !important;
+    border-radius: 18px;
+    padding: 2rem 2.5rem !important;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* أعلى الصفحة */
@@ -54,7 +67,7 @@ body,
     direction: rtl !important;
 }
 
-/* محاذاة النصوص العربية */
+/* النصوص العربية */
 .stMarkdown,
 .stMarkdown p,
 .stMarkdown li,
@@ -69,12 +82,12 @@ body,
     color: var(--text-color) !important;
 }
 
-/* عنوان التطبيق الرئيسي */
+/* العنوان الرئيسي */
 h1 {
     direction: rtl !important;
     text-align: center !important;
     color: var(--text-color) !important;
-    font-size: 2.05rem !important;
+    font-size: 2rem !important;
     font-weight: 800 !important;
     line-height: 1.4 !important;
     margin-bottom: 18px !important;
@@ -89,44 +102,51 @@ h3 {
     font-weight: 700 !important;
 }
 
-/* تصغير العناوين الفرعية قليلًا */
 h2 {
-    font-size: 1.55rem !important;
+    font-size: 1.5rem !important;
 }
 
 h3 {
-    font-size: 1.3rem !important;
+    font-size: 1.28rem !important;
 }
 
 /* وصف التطبيق */
 .app-description {
     direction: rtl !important;
     text-align: right !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 82%,
+        white 18%
+    ) !important;
     color: var(--text-color) !important;
-    padding: 16px 20px;
-    border-right: 5px solid var(--primary-color);
-    border-radius: 12px;
+    padding: 17px 21px;
+    border-right: 5px solid #3b9be5;
+    border-radius: 13px;
     line-height: 1.9;
     margin-bottom: 22px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
 }
 
 /* وصف المثال */
 .example-description {
     direction: rtl !important;
     text-align: right !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 80%,
+        #5ba8e6 20%
+    ) !important;
     color: var(--text-color) !important;
-    padding: 13px 17px;
-    border-right: 4px solid var(--primary-color);
-    border-radius: 10px;
+    padding: 14px 18px;
+    border-right: 4px solid #46a7ee;
+    border-radius: 11px;
     line-height: 1.8;
     margin: 8px 0 18px 0;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 13px rgba(0, 0, 0, 0.13);
 }
 
-/* عناوين خانات الإدخال */
+/* عناوين الحقول */
 [data-testid="stWidgetLabel"] {
     width: 100% !important;
     display: flex !important;
@@ -136,9 +156,10 @@ h3 {
 [data-testid="stWidgetLabel"] p {
     width: 100% !important;
     text-align: right !important;
+    font-weight: 600 !important;
 }
 
-/* خانة إدخال الأضلاع */
+/* خانة الأضلاع */
 .stTextInput {
     direction: rtl !important;
 }
@@ -146,9 +167,17 @@ h3 {
 .stTextInput input {
     direction: ltr !important;
     text-align: left !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 85%,
+        white 15%
+    ) !important;
     color: var(--text-color) !important;
-    border: 1px solid rgba(128, 128, 128, 0.45) !important;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--text-color) 35%,
+        transparent
+    ) !important;
     border-radius: 10px !important;
 }
 
@@ -160,11 +189,15 @@ h3 {
 .stNumberInput input {
     direction: ltr !important;
     text-align: center !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 85%,
+        white 15%
+    ) !important;
     color: var(--text-color) !important;
 }
 
-/* القائمة المنسدلة */
+/* القوائم المنسدلة */
 .stSelectbox {
     direction: rtl !important;
     text-align: right !important;
@@ -173,9 +206,17 @@ h3 {
 div[data-baseweb="select"] > div {
     direction: rtl !important;
     text-align: right !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 85%,
+        white 15%
+    ) !important;
     color: var(--text-color) !important;
-    border-color: rgba(128, 128, 128, 0.45) !important;
+    border-color: color-mix(
+        in srgb,
+        var(--text-color) 35%,
+        transparent
+    ) !important;
     border-radius: 10px !important;
 }
 
@@ -185,13 +226,17 @@ div[data-baseweb="select"] span {
     color: var(--text-color) !important;
 }
 
-/* خيارات القائمة عند فتحها */
+/* القائمة عند فتحها */
 div[data-baseweb="popover"],
 div[data-baseweb="menu"],
 ul[role="listbox"] {
     direction: rtl !important;
     text-align: right !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 82%,
+        white 18%
+    ) !important;
     color: var(--text-color) !important;
 }
 
@@ -201,44 +246,67 @@ li[role="option"] {
     color: var(--text-color) !important;
 }
 
-/* زر التشغيل */
+/* زر تشغيل التحليل */
 .stButton > button {
-    width: 100%;
-    min-height: 48px;
-    color: #ffffff !important;
+    width: 100% !important;
+    min-height: 54px !important;
     background: linear-gradient(
         90deg,
-        var(--primary-color),
-        #2878b8
+        #075ea8 0%,
+        #1387dc 50%,
+        #075ea8 100%
     ) !important;
-    border: none !important;
-    border-radius: 12px !important;
-    font-size: 17px !important;
-    font-weight: 700 !important;
-    transition: 0.2s;
+    color: #ffffff !important;
+    border: 2px solid #55b8ff !important;
+    border-radius: 13px !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 6px 18px rgba(0, 119, 204, 0.35) !important;
+    transition: 0.2s ease-in-out;
 }
 
-.stButton > button p {
+.stButton > button p,
+.stButton > button span,
+.stButton > button div {
     color: #ffffff !important;
+    fill: #ffffff !important;
     text-align: center !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .stButton > button:hover {
     color: #ffffff !important;
-    filter: brightness(0.88);
-    transform: translateY(-1px);
+    background: linear-gradient(
+        90deg,
+        #064c88 0%,
+        #0878c7 50%,
+        #064c88 100%
+    ) !important;
+    border-color: #9ad8ff !important;
+    box-shadow: 0 8px 22px rgba(0, 119, 204, 0.48) !important;
+    transform: translateY(-2px);
 }
 
-/* بطاقات الإحصائيات */
+/* بطاقات النتائج */
 [data-testid="stMetric"] {
     direction: rtl !important;
     text-align: center !important;
-    background-color: var(--secondary-background-color) !important;
+    background: color-mix(
+        in srgb,
+        var(--secondary-background-color) 78%,
+        white 22%
+    ) !important;
     color: var(--text-color) !important;
-    border: 1px solid rgba(128, 128, 128, 0.35) !important;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--primary-color) 45%,
+        transparent
+    ) !important;
     border-radius: 14px !important;
-    padding: 15px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    padding: 16px !important;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.14);
 }
 
 [data-testid="stMetricLabel"],
@@ -249,12 +317,27 @@ li[role="option"] {
     color: var(--text-color) !important;
 }
 
-/* الخط الفاصل */
-hr {
-    border-color: rgba(128, 128, 128, 0.30) !important;
+[data-testid="stMetricValue"] {
+    font-weight: 800 !important;
 }
 
-/* شريط تمرير مناسب للوضعين */
+/* رسائل النتائج */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    border-width: 1px !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+}
+
+/* الخط الفاصل */
+hr {
+    border-color: color-mix(
+        in srgb,
+        var(--text-color) 25%,
+        transparent
+    ) !important;
+}
+
+/* شريط التمرير */
 ::-webkit-scrollbar {
     width: 9px;
 }
@@ -264,16 +347,14 @@ hr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+    background: #268bd2;
     border-radius: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
 
 
-# ==========================================
 # الأمثلة الجاهزة
-# ==========================================
 EXAMPLES = {
     "مخطط مستوٍ": {
         "edges": "(1,2), (2,3), (3,4), (4,1), (1,3)",
@@ -337,9 +418,7 @@ LAYOUT_OPTIONS = [
 ]
 
 
-# ==========================================
-# إعداد القيم الأولية
-# ==========================================
+# القيم الأولية
 if "selected_example" not in st.session_state:
     st.session_state.selected_example = "مخطط مستوٍ"
 
@@ -356,12 +435,9 @@ if "layout_name" not in st.session_state:
     st.session_state.layout_name = EXAMPLES["مخطط مستوٍ"]["layout"]
 
 
-# ==========================================
 # تحميل المثال المحدد
-# ==========================================
 def load_selected_example():
-    example_name = st.session_state.selected_example
-    example = EXAMPLES[example_name]
+    example = EXAMPLES[st.session_state.selected_example]
 
     st.session_state.edges_input = example["edges"]
     st.session_state.start_node = example["start"]
@@ -369,9 +445,7 @@ def load_selected_example():
     st.session_state.layout_name = example["layout"]
 
 
-# ==========================================
 # قراءة الأضلاع والتحقق منها
-# ==========================================
 def parse_edges(edges_text):
     if not edges_text.strip():
         raise ValueError("لم يتم إدخال أي أضلاع.")
@@ -386,9 +460,7 @@ def parse_edges(edges_text):
         )
 
     if not isinstance(edges, list) or len(edges) == 0:
-        raise ValueError(
-            "يجب إدخال ضلع واحد على الأقل."
-        )
+        raise ValueError("يجب إدخال ضلع واحد على الأقل.")
 
     cleaned_edges = []
 
@@ -418,9 +490,7 @@ def parse_edges(edges_text):
                 "غير مسموحة في هذا الإصدار."
             )
 
-        normalized_edge = tuple(
-            sorted((node1, node2))
-        )
+        normalized_edge = tuple(sorted((node1, node2)))
 
         if normalized_edge not in cleaned_edges:
             cleaned_edges.append(normalized_edge)
@@ -428,9 +498,7 @@ def parse_edges(edges_text):
     return cleaned_edges
 
 
-# ==========================================
 # اختيار طريقة الرسم
-# ==========================================
 def get_layout(graph, layout_name, is_planar):
     if layout_name == "تلقائي":
         if is_planar:
@@ -484,10 +552,7 @@ def get_layout(graph, layout_name, is_planar):
         )
 
     if layout_name == "نابضي Spring":
-        return nx.spring_layout(
-            graph,
-            seed=42
-        )
+        return nx.spring_layout(graph, seed=42)
 
     if layout_name == "كاماتا–كاواي":
         return nx.kamada_kawai_layout(graph)
@@ -501,16 +566,11 @@ def get_layout(graph, layout_name, is_planar):
     if layout_name == "دائري Circular":
         return nx.circular_layout(graph)
 
-    return nx.spring_layout(
-        graph,
-        seed=42
-    )
+    return nx.spring_layout(graph, seed=42)
 
 
-# ==========================================
 # عنوان التطبيق
-# ==========================================
-st.title("📐 أداة تحليل ورسم المخططات الرياضية")
+st.title(" أداة تحليل ورسم المخططات الرياضية")
 
 st.markdown("""
 <div class="app-description">
@@ -521,10 +581,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ==========================================
-# اختيار مثال جاهز
-# ==========================================
-st.subheader("🧪 أمثلة جاهزة للتجربة")
+# اختيار المثال
+st.subheader("📐 أمثلة جاهزة للتجربة")
 
 st.selectbox(
     "اختاري مثالًا جاهزًا أو أدخلي مخططك الخاص:",
@@ -540,17 +598,15 @@ current_example = EXAMPLES[
 st.markdown(
     f"""
     <div class="example-description">
-    <strong>عن المثال:</strong>
-    {current_example["description"]}
+        <strong>عن المثال:</strong>
+        {current_example["description"]}
     </div>
     """,
     unsafe_allow_html=True
 )
 
 
-# ==========================================
 # إدخال بيانات المخطط
-# ==========================================
 st.subheader("✏️ بيانات المخطط")
 
 edges_input = st.text_input(
@@ -585,11 +641,9 @@ with input_col3:
     )
 
 
-# ==========================================
 # تشغيل التحليل
-# ==========================================
 if st.button(
-    "🔍 تشغيل التحليل الشامل",
+    "▶ تشغيل التحليل الشامل",
     use_container_width=True
 ):
     try:
@@ -600,21 +654,14 @@ if st.button(
 
         vertices_count = graph.number_of_nodes()
         edges_count = graph.number_of_edges()
-
-        components_count = (
-            nx.number_connected_components(graph)
-        )
+        components_count = nx.number_connected_components(graph)
 
         is_connected = nx.is_connected(graph)
-
-        is_planar, embedding = (
-            nx.check_planarity(graph)
-        )
-
+        is_planar, embedding = nx.check_planarity(graph)
         is_bipartite = nx.is_bipartite(graph)
         is_tree = nx.is_tree(graph)
 
-        # صيغة أويلر
+        # تطبيق صيغة أويلر
         if is_planar:
             faces_count = (
                 edges_count
@@ -629,16 +676,14 @@ if st.button(
                 + faces_count
             )
 
-            euler_right_side = (
-                components_count + 1
-            )
+            euler_right_side = components_count + 1
 
         else:
             faces_count = "غير متاح"
             euler_left_side = None
             euler_right_side = None
 
-        # أقصر مسار
+        # إيجاد أقصر مسار
         shortest_path = None
         path_message = None
         path_length = None
@@ -668,9 +713,7 @@ if st.button(
             is_planar
         )
 
-        # ==========================================
-        # النتائج
-        # ==========================================
+        # نتائج التحليل
         st.divider()
         st.subheader("📊 نتائج التحليل")
 
@@ -707,9 +750,7 @@ if st.button(
             components_count
         )
 
-        # ==========================================
         # صيغة أويلر
-        # ==========================================
         st.subheader("🧮 صيغة أويلر")
 
         if is_planar:
@@ -739,9 +780,7 @@ if st.button(
                 "لأن المخطط غير مستوٍ."
             )
 
-        # ==========================================
         # خصائص المخطط
-        # ==========================================
         st.subheader("🧩 خصائص المخطط")
 
         property_col1, property_col2 = st.columns(2)
@@ -783,9 +822,7 @@ if st.button(
             f"**درجات الرؤوس:** {degrees_text}"
         )
 
-        # ==========================================
         # أقصر مسار
-        # ==========================================
         st.subheader("📍 أقصر مسار")
 
         if shortest_path is not None:
@@ -805,20 +842,14 @@ if st.button(
         else:
             st.warning(path_message)
 
-        # ==========================================
         # رسم المخطط
-        # ==========================================
         st.subheader("🎨 الرسم البياني")
 
-        figure, axis = plt.subplots(
-            figsize=(10, 6)
-        )
+        figure, axis = plt.subplots(figsize=(10, 6))
 
-        # خلفية الرسم مستقلة حتى تكون واضحة في الوضعين
         figure.patch.set_facecolor("#eef5fb")
         axis.set_facecolor("#eef5fb")
 
-        # رسم الرؤوس
         nx.draw_networkx_nodes(
             graph,
             positions,
@@ -829,7 +860,6 @@ if st.button(
             ax=axis
         )
 
-        # رسم الأضلاع
         nx.draw_networkx_edges(
             graph,
             positions,
@@ -839,7 +869,6 @@ if st.button(
             ax=axis
         )
 
-        # أرقام الرؤوس
         nx.draw_networkx_labels(
             graph,
             positions,
