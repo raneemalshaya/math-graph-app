@@ -10,7 +10,6 @@ import streamlit as st
 # ==========================================
 st.set_page_config(
     page_title="محلل المخططات الرياضية",
- 
     layout="wide"
 )
 
@@ -395,14 +394,14 @@ EXAMPLES = {
 }
 
 
+# ==========================================
+# طرق الرسم
+# ==========================================
 LAYOUT_OPTIONS = [
     "تلقائي",
     "مستوٍ Planar",
     "ثنائي الأجزاء Bipartite",
     "نابضي Spring",
-    "كاماتا–كاواي",
-    "طيفي Spectral",
-    "صدفي Shell",
     "دائري Circular"
 ]
 
@@ -495,6 +494,8 @@ def parse_edges(edges_text):
 # طريقة الرسم
 # ==========================================
 def get_layout(graph, layout_name, is_planar):
+
+    # الرسم التلقائي
     if layout_name == "تلقائي":
         if is_planar:
             return nx.planar_layout(graph)
@@ -514,8 +515,11 @@ def get_layout(graph, layout_name, is_planar):
                 align="vertical"
             )
 
-        return nx.kamada_kawai_layout(graph)
+        # إذا لم يكن مستويًا ولا ثنائي الأجزاء
+        # يستخدم الرسم النابضي
+        return nx.spring_layout(graph, seed=42)
 
+    # الرسم المستوي
     if layout_name == "مستوٍ Planar":
         if not is_planar:
             raise ValueError(
@@ -525,6 +529,7 @@ def get_layout(graph, layout_name, is_planar):
 
         return nx.planar_layout(graph)
 
+    # الرسم ثنائي الأجزاء
     if layout_name == "ثنائي الأجزاء Bipartite":
         if not nx.is_bipartite(graph):
             raise ValueError(
@@ -545,10 +550,11 @@ def get_layout(graph, layout_name, is_planar):
             align="vertical"
         )
 
+    # الرسم النابضي
     if layout_name == "نابضي Spring":
         return nx.spring_layout(graph, seed=42)
 
-
+    # الرسم الدائري
     if layout_name == "دائري Circular":
         return nx.circular_layout(graph)
 
@@ -559,7 +565,7 @@ def get_layout(graph, layout_name, is_planar):
 # واجهة التطبيق
 # ==========================================
 st.markdown(
-    '<h1 class="main-title">📐 أداة تحليل ورسم المخططات الرياضية</h1>',
+    '<h1 class="main-title"> أداة تحليل ورسم المخططات الرياضية</h1>',
     unsafe_allow_html=True
 )
 
@@ -573,7 +579,7 @@ st.markdown("""
 
 
 # الأمثلة
-st.subheader("🧪 أمثلة جاهزة للتجربة")
+st.subheader("📐 أمثلة جاهزة للتجربة")
 
 st.selectbox(
     "اختاري مثالًا جاهزًا أو أدخلي مخططك الخاص:",
@@ -758,7 +764,6 @@ if st.button(
                     f"+ {faces_count} = {euler_result} = C + 1"
                 )
 
-            # سطر واحد لتجنب ظهور HTML كنص
             st.markdown(
                 f'<div class="formula-box">{formula_text}</div>',
                 unsafe_allow_html=True
